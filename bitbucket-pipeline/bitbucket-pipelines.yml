@@ -1,0 +1,28 @@
+pipelines:
+  branches:
+    master:
+      # This step zips the package to be deployed
+      - step: 
+          name: Zip package
+          script:
+            # First install the zip command
+            - cd packages
+            - sudo apt-get update
+            - sudo apt-get install zip
+            # Zip the demo-api-tasks package
+            - zip -qr ../demo-api-tasks.zip demo-api-tasks/*
+          # Set the zip file as artifact so that it's available across the whole pipeline
+          artifacts:
+            - demo-api-tasks.zip
+      # Deploy the package to Martini instance using the Package API
+      - step:
+          name: Deploy to Martini server
+          script:
+            # First install jq to parse the token from JSON response
+            - apt-get install -y jq
+
+            - echo "[INFO] Retrieving access token..."
+            - access_token=$(curl -X POST --http1.1 -s -H "Content-Type:application/x-www-form-urlencoded" -d "grant_type=password&username=$EMAIL_ADD&password=$PASSWORD&client_id=TOROMartini&client_secret=TOROMartini" "$MARTINI_SERVER_URL/oauth/token" | jq -r ".access_token")
+            
+            - echo "[INFO] Uploading Martini package..."
+            - curl -X POST --http1.1 -s --max-time 480 --connect-timeout 240 -F file=@demo-api-tasks.zip -H "Authorization:Bearer $access_token" "$MARTINI_SERVER_URL/esbapi/packages/upload?stateOnCreate=STARTED&replaceExisting=true"
