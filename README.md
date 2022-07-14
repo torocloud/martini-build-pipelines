@@ -5,6 +5,8 @@ The pipeline was use to upload packages on our Martini Instance using Martini Gi
 https://developer.torocloud.com/docs/martini/
 </pre>
 
+Files are uploaded on this repository and edit it on your own use.
+
 Here's the exact link for tutorial of every pipelines:
 
 ## AWS Code Pipeline
