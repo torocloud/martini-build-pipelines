@@ -1,0 +1,51 @@
+trigger:
+- master
+
+# This specifies the OS that your jobs will run on.
+pool:
+  vmImage: ubuntu-latest
+
+jobs:
+# The first job will install the zip package and will zip the martini package.
+- job: CreateZip
+  displayName: Create zip package
+  
+  steps:
+  - script: |
+      echo "[INFO] Installing zip package..."
+      sudo apt update -y && sudo apt install -y zip
+      echo "[INFO] Installation successful..."
+      cd packages
+      echo "[INFO] Zipping Martini package..."
+      zip -qr ../infante_azure.zip infante_azure/
+      echo "[INFO] Zipping successful..."
+    displayName: 'Zip'
+# This publishes the zip file martini package as an artifact
+  - publish: infante_azure.zip
+# This line specifies the artifact name
+    artifact: martini
+    
+# The second job will install the jq package and will deploy the local martini package to martini online.
+- job: DeployPackage
+  displayName: Deploy the package
+  
+  steps:
+# This downloads the artifact which is the zip file martini package
+  - download: current
+# This line specifies the artifact name
+    artifact: martini
+  - script: |
+      echo "[INFO] Installing jq package..."
+      sudo apt update -y && sudo apt install -y jq
+      echo "[INFO] Installation successful..."
+      echo "[INFO] Retrieving access token..."
+      token=$(curl -X POST $(MARTINI_ONLINE_URL)/oauth/token -H 'Accept:application/json' -H 'Content-Type:application/x-www-form-urlencoded' -d "grant_type=password&username=$(TORO_EMAIL)&password=$(TORO_PASSWORD)&client_id=TOROMartini&client_secret=TOROMartini" | jq -r .access_token)
+      echo "[INFO] Access token retrieval successful..."
+      echo "[INFO] Deploying Martini package to Martini Online..."
+      curl -X POST -H "Authorization:Bearer $token" "$(MARTINI_ONLINE_URL)/esbapi/packages/upload?stateOnCreate=STARTED&replaceExisting=true" -H "accept:application/json" -H "Content-Type:multipart/form-data" -F "file=@"$(Pipeline.Workspace)"/martini/infante_azure.zip;type=application/x-zip-compressed"
+      echo "[INFO] Upload successful..."
+    displayName: 'Deploy'
+# This line tells the agent that it will need to do the first job successfully to run the second job. 
+  dependsOn: CreateZip
+  
+# In the "file=@"$(Pipeline.Workspace)"/martini/infante_azure.zip; the variable $(Pipeline.Workspace) is where the downloaded artifacts are located and the 'martini' is the artifact name which containes our zip file

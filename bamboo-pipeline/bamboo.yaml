@@ -1,0 +1,80 @@
+---
+version: 2
+plan:
+  project-key: TP
+  key: TPL
+  name: TORO Plan
+  description: Plan for Martini deployment
+stages:
+- Default Stage:
+    manual: false
+    final: false
+    jobs:
+    - Default Job
+    - TOROJob
+Default Job:
+  key: JOB1
+  tasks:
+  - checkout:
+      force-clean-build: 'false'
+      description: Checkout Default Repository
+  artifact-subscriptions: []
+TOROJob:
+  key: TOR
+  description: Deploys to server
+  tasks:
+  - checkout:
+      force-clean-build: 'false'
+      description: Checkout Default Repository
+  - script:
+      interpreter: SHELL
+      scripts:
+      - |-
+        cd packages
+        sudo apt-get -y install zip unzip
+        zip -qr ../baluyut-bamboopackage.zip baluyut_bamboopackage/*
+      description: ZIP Package
+  - script:
+      interpreter: SHELL
+      scripts:
+      - |-
+        sudo apt-get -y install jq
+        pampalub=$(curl -X POST $TOKENURL -H 'Accept:application/json' -H 'Content-Type:application/x-www-form-urlencoded' -d "grant_type=password&username="$TOROUSR"&password="$TOROPSW"&client_id=TOROMartini&client_secret=TOROMartini" | jq -r .access_token)
+        curl -X POST "$TOROURL/esbapi/packages/upload?stateOnCreate=STARTED&replaceExisting=true" -H  "accept:application/json" -H  "Content-Type:multipart/form-data" -F "file=@baluyut-bamboopackage.zip;type=application/x-zip-compressed" -H "Authorization:Bearer $pampalub"
+      environment: TOKENURL="https://toro282.us-east.toroserver.com/oauth/token" TOROURL="https://toro282.us-east.toroserver.com" TOROUSR="toro.ricardomiguel.baluyut@gmail.com" TOROPSW="Ad0lfONG_m4lupet"
+      description: Deploys to server
+  artifact-subscriptions: []
+repositories:
+- Thisrepo:
+    scope: global
+triggers:
+- polling:
+    period: '180'
+branches:
+  create: manually
+  delete: never
+  link-to-jira: true
+notifications: []
+labels: []
+dependencies:
+  require-all-stages-passing: false
+  enabled-for-branches: true
+  block-strategy: none
+  plans: []
+other:
+  concurrent-build-plugin: system-default
+---
+version: 2
+plan:
+  key: TP-TPL
+plan-permissions:
+- users:
+  - rmbaluyutiii
+  permissions:
+  - view
+  - edit
+  - build
+  - clone
+  - admin
+  - view_configuration
+...
