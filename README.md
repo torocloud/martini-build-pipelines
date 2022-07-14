@@ -12,6 +12,9 @@ Here's the exact link for tutorial of every pipelines:
 ## AWS Code Pipeline
 https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/aws-codedeploy/
 
+## Bitbucket Pipeline
+will update this document once its available
+
 ## Bamboo
 https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/bamboo/
 
