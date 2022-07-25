@@ -1,31 +1,15 @@
-# martini-build-pipelines
+# Configurating build pipelines for Martini
 
-The pipeline was use to upload packages on our Martini Instance using Martini Git. Tutorials for this CI/CD tools can be found on our Martini Documentation. Here's the link:
-<pre>
-https://developer.torocloud.com/docs/martini/
-</pre>
+Automated build pipelines for Martini projects. The configuration files included in this repository enable the user to quickly setup a build pipeline in their preferred CI/CD tool.
 
-Files are uploaded on this repository and edit it on your own use.
+## Martini build pipeline video tutorials
 
-Here's the exact link for tutorial of every pipelines:
+Video tutorials on how to configure each CI/CD are available at:
 
-## AWS Code Pipeline
-https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/aws-codedeploy/
-
-## Bitbucket Pipeline
-will update this document once its available
-
-## Bamboo
-https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/bamboo/
-
-## Github Actions
-https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/github-actions/
-
-## Gitlab Pipeline
-https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/gitlab-pipelines/
-
-## Jenkins
-https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/jenkins/
-
-## Microsoft Azure Pipeline
-https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/microsoft-azure-pipeline/
+- [AWS Code Pipeline](https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/aws-codedeploy/)
+- Bitbucket Pipelines (video will be posted soon)
+- [Bamboo](https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/bamboo/)
+- [Github Actions](https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/github-actions/)
+- [Gitlab Pipeline](https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/gitlab-pipelines/)
+- [Jenkins](https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/jenkins/)
+- [Microsoft Azure Pipeline](https://developer.torocloud.com/docs/martini/video-tutorials/creating-a-build-pipeline-with-martini/microsoft-azure-pipeline/)
